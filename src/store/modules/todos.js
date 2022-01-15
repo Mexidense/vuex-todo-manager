@@ -9,31 +9,43 @@ const getters = {
 }
 
 const mutations = {
-  setTodos: (state, payload) => (state.todos = payload),
-  addTodo: (state, payload) => state.todos.unshift(payload),
-  removeTodo: (state, id) => (state.todos = state.todos.filter(todo => todo.id !== id))
+  setTodos: (state, todos) => (state.todos = todos),
+  addTodo: (state, todo) => state.todos.unshift(todo),
+  removeTodo: (state, id) => (state.todos = state.todos.filter(todo => todo.id !== id)),
+  updateTodo: (state, todoToUpdate) => {
+    const index = state.todos.findIndex(todo => todo.id === todoToUpdate.id)
+
+    if (index !== -1) {
+      state.todos.splice(index, 1, todoToUpdate)
+    }
+  }
 }
 
 const actions = {
   async fetchTodos ({ commit }) {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+    const response = await axios.get('https://jsonplaceholder.typicode.com/todos')
     commit('setTodos', response.data)
   },
 
-  async addTodo ({ commit }, payload) {
-    const response = await axios.post('https://jsonplaceholder.typicode.com/posts', { title: payload, completed: false })
+  async addTodo ({ commit }, title) {
+    const response = await axios.post('https://jsonplaceholder.typicode.com/todos', { title, completed: false })
     commit('addTodo', response.data)
   },
 
   async deleteTodo ({ commit }, id) {
-    await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
+    await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
 
     commit('removeTodo', id)
   },
 
   async filterTodosByLimit ({ commit }, quantity) {
-    const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_limit=${quantity}`)
+    const response = await axios.get(`https://jsonplaceholder.typicode.com/todos?_limit=${quantity}`)
     commit('setTodos', response.data)
+  },
+
+  async updateTodo ({ commit }, todo) {
+    const response = await axios.put(`https://jsonplaceholder.typicode.com/todos/${todo.id}`, todo)
+    commit('updateTodo', response.data)
   }
 }
 

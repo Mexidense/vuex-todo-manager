@@ -1,10 +1,29 @@
 <template>
   <div>
       <h3>Todos</h3>
+      <div class="legend">
+        <div>
+          <span>Double click to mark as complete</span>
+        </div>
+        <div>
+          <span class="incomplete-todo-box"/> Incomplete
+        </div>
+        <div>
+          <span class="complete-todo-box"/> Complete
+        </div>
+      </div>
       <div class="todos">
-        <div v-for="todo in allTodos" :key="todo.id" class="todo">
+        <div
+          @dblclick="onDoubleClick(todo)"
+          v-for="todo in allTodos"
+          :key="todo.id"
+          :class="{'is-complete': todo.completed}"
+          class="todo"
+        >
           {{ todo.title }}
-          <div @click="onDeleteTodo(todo.id)">
+          <div
+            @click="onDeleteTodo(todo.id)"
+          >
             <i class="fas fa-trash-alt delete-icon"/>
           </div>
         </div>
@@ -31,11 +50,21 @@ export default {
   methods: {
     ...mapActions({
       getTodos: 'fetchTodos',
-      deleteTodo: 'deleteTodo'
+      deleteTodo: 'deleteTodo',
+      updateTodo: 'updateTodo'
     }),
 
     onDeleteTodo (id) {
       this.deleteTodo(id)
+    },
+
+    onDoubleClick (todo) {
+      const todoToUpdate = {
+        id: todo.id,
+        title: todo.title,
+        completed: !todo.completed
+      }
+      this.updateTodo(todoToUpdate)
     }
   }
 }
@@ -64,5 +93,30 @@ export default {
   right: 10px;
   color: #fff;
   cursor: pointer;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.incomplete-todo-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #35495e;
+}
+
+.complete-todo-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #41b883;
+}
+
+.is-complete {
+  background: #35495e;
+  color: #fff;
 }
 </style>
