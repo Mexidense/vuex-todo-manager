@@ -3,8 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import store from './store'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import '@fortawesome/fontawesome-free/css/all.css'
+library.add(faTrash)
+Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 

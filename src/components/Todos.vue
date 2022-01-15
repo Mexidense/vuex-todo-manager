@@ -23,8 +23,9 @@
           {{ todo.title }}
           <div
             @click="onDeleteTodo(todo.id)"
+            class="icon"
           >
-            <i class="fas fa-trash-alt delete-icon"/>
+            <FontAwesomeIcon icon="trash" class="delete-icon"/>
           </div>
         </div>
       </div>
@@ -85,6 +86,10 @@ export default {
   text-align: center;
   position: relative;
   cursor: pointer;
+}
+
+.icon {
+  margin-top: 10px
 }
 
 .delete-icon  {
