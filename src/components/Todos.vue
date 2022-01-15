@@ -4,6 +4,9 @@
       <div class="todos">
         <div v-for="todo in allTodos" :key="todo.id" class="todo">
           {{ todo.title }}
+          <div @click="onDeleteTodo(todo.id)">
+            <i class="fas fa-trash-alt delete-icon"/>
+          </div>
         </div>
       </div>
   </div>
@@ -27,8 +30,13 @@ export default {
 
   methods: {
     ...mapActions({
-      getTodos: 'fetchTodos'
-    })
+      getTodos: 'fetchTodos',
+      deleteTodo: 'deleteTodo'
+    }),
+
+    onDeleteTodo (id) {
+      this.deleteTodo(id)
+    }
   }
 }
 </script>
@@ -47,6 +55,14 @@ export default {
   border-radius: 5px;
   text-align: center;
   position: relative;
+  cursor: pointer;
+}
+
+.delete-icon  {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: #fff;
   cursor: pointer;
 }
 </style>

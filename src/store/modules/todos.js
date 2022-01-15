@@ -10,7 +10,8 @@ const getters = {
 
 const mutations = {
   setTodos: (state, payload) => (state.todos = payload),
-  addTodo: (state, payload) => state.todos.unshift(payload)
+  addTodo: (state, payload) => state.todos.unshift(payload),
+  removeTodo: (state, id) => (state.todos = state.todos.filter(todo => todo.id !== id))
 }
 
 const actions = {
@@ -22,6 +23,12 @@ const actions = {
   async addTodo ({ commit }, payload) {
     const response = await axios.post('https://jsonplaceholder.typicode.com/posts', { title: payload, completed: false })
     commit('addTodo', response.data)
+  },
+
+  async deleteTodo ({ commit }, id) {
+    await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
+
+    commit('removeTodo', id)
   }
 }
 
